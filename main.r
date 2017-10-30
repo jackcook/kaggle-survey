@@ -3,7 +3,7 @@ library(dplyr)
 library(ggplot2)
 library(tibble)
 
-results <- as.tibble(fread("multipleChoiceResponses.csv"))
+results <- as.tibble(fread("./data/multipleChoiceResponses.csv"))
 
 # Get all column names that begin with "LearningPlatformUsefulness"
 platforms <- grep("^LearningPlatformUsefulness", names(results), value=T)
