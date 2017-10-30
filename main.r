@@ -1,21 +1,31 @@
+library(data.table)
+library(dplyr)
+library(ggplot2)
+library(tibble)
+
 results <- as.tibble(fread("multipleChoiceResponses.csv"))
+
+# Get all column names that begin with "LearningPlatformUsefulness"
 platforms <- grep("^LearningPlatformUsefulness", names(results), value=T)
+
 names <- c()
 popularities <- c()
 scores <- c()
+
 for (platform in platforms) {
     usefulness <- results %>%
         group_by_(platform) %>%
         count()
     
+    # Popularity = the number of people who responded to this question
     popularity <- usefulness[[2]][2] + usefulness[[2]][3] + usefulness[[2]][4]
+    
+    # Usefulness = a weighted average determining the usefulness of this platform
     score <- (usefulness[[2]][2] * 0 + usefulness[[2]][3] * 0.5 + usefulness[[2]][4] * 1) / popularity
     
     names <- c(names, gsub("LearningPlatformUsefulness", "", platform))
     popularities <- c(popularities, popularity)
     scores <- c(scores, score)
-    
-    print(paste(platform, " usefulness: ", score, sep = ""))
 }
 
 scores_df <- data.frame(
@@ -28,7 +38,7 @@ ggplot(scores_df, aes(x = Usefulness, y = Popularity)) +
     ggtitle("Effectiveness of Learning Methods") +
     geom_point() +
     geom_smooth(method = lm, se = FALSE, color = "#333333", size = 0.5) +
-    geom_text(aes(label = Name), nudge_y = 225) +
+    geom_text(aes(label = Name, family = "San Francisco Display"), nudge_y = 250) +
     theme(
         plot.background = element_rect(fill = "#eeeeee"),
         panel.background = element_rect(fill = "#eeeeee"),
