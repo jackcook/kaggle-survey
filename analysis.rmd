@@ -14,6 +14,40 @@ results <- as.tibble(fread("./data/multipleChoiceResponses.csv"))
 
 Kaggle recently published the results of their 2017 data science survey. As someone with a budding interest in data science, I figured I'd try to find how the results could be useful to people like me, who are trying to figure out how to get started. So here we go!
 
+## Programming language
+
+From what I understand, one of the first questions many data scientists have to answer is which language they want to write their code in. In this graph, we'll see how Python and R stack up against each other as recommendations based on participants' job titles.
+
+```{r echo = FALSE}
+results %>%
+    rename(Language = LanguageRecommendationSelect, title = CurrentJobTitleSelect) %>%
+    filter(Language == "R" | Language == "Python") %>%
+    filter(title != "") %>%
+    group_by(title, Language) %>%
+    count() %>%
+    ggplot(aes(title, n, color = Language)) +
+    ggtitle("Python vs. R by Job Title") +
+    labs(x = "Job Title", y = "Count") +
+    geom_point(size = 4) +
+    theme(
+        plot.background = element_rect(fill = "#eeeeee"),
+        panel.background = element_rect(fill = "#eeeeee"),
+        legend.background = element_rect(fill = "#eeeeee"),
+        legend.title = element_text(size = 13, family = "San Francisco Display", face = "bold"),
+        legend.text = element_text(size = 11, family = "San Francisco Display"),
+        panel.grid.major = element_line(size = 0.4, linetype = "solid", color = "#cccccc"),
+        panel.grid.minor = element_line(size = 0),
+        plot.title = element_text(size = 20, family = "San Francisco Display", face = "bold", hjust = 0.5, margin = margin(b = 20)),
+        axis.title = element_text(size = 14, family = "San Francisco Display", face = "bold"),
+        axis.text.x = element_text(angle = 330, hjust = 0),
+        axis.title.y = element_text(margin = margin(r = 20)),
+        axis.ticks = element_blank(),
+        plot.margin = unit(c(1, 1.25, 1, 1), "cm")
+    )
+```
+
+As we can see, **Python is favored for beginners over R in almost every scenario**, and notably so for data scientists, software developers, and machine learning engineers. However, R is slightly favored by statisticians.
+
 ## Resources for learning
 
 One of the first questions in the survey asked participants how useful certain resources are for learning data science skills. For our first graph, we'll plot each resource's usefulness against its popularity. We can see if some resources are overhyped, or if some aren't being used enough. Popularity is determined by how many people answered the question for this resource, and usefulness is computed as a weighted average, with 1 point awarded for each "very useful" answer, half a point for each "somewhat useful" answer, and 0 points for each "not useful" answer.
