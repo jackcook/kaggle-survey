@@ -181,3 +181,17 @@ ggplot(scores_df, aes(x = Usefulness, y = Popularity)) +
 ```
 
 Interestingly enough, MOOCs scored the lowest in terms of usefulness, yet online courses scored the second highest in the last question. Therefore, while courses can be good for learning about data science, they should not be shown as a form of qualification to employers. We can see that **knowledge of Python, advanced statistics, and vizualization tools ranked the highest** in terms of skills that are useful in getting data science jobs.
+
+## Majors and likely positions
+
+```{r echo = FALSE}
+results %>%
+    rename(Major = MajorSelect, Title = CurrentJobTitleSelect) %>%
+    filter(Title != "", Major != "") %>%
+    group_by(Title, Major) %>%
+    summarize(n = n()) %>%
+    mutate(freq = n / sum(n)) %>%
+    ggplot() +
+    geom_bar(aes(y = freq, x = Title, fill = Major), stat = "identity") +
+    theme(axis.text.x = element_text(angle = 330, hjust = 0))
+```
