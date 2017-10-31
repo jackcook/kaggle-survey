@@ -182,6 +182,41 @@ ggplot(scores_df, aes(x = Usefulness, y = Popularity)) +
 
 Interestingly enough, MOOCs scored the lowest in terms of usefulness, yet online courses scored the second highest in the last question. Therefore, while courses can be good for learning about data science, they should not be shown as a form of qualification to employers. We can see that **knowledge of Python, advanced statistics, and vizualization tools ranked the highest** in terms of skills that are useful in getting data science jobs.
 
+## Tools in the real world
+
+```{r echo = FALSE}
+# Get all column names that begin with "WorkToolsFrequency" and end in a letter
+platforms <- grep("^WorkToolsFrequency.*[A-z]$", names(results), value=T)
+
+names <- c()
+popularities <- c()
+scores <- c()
+
+for (platform in platforms) {
+    usefulness <- results %>%
+        group_by_(platform) %>%
+        count()
+    
+    # Popularity = the number of people who responded to this question
+    popularity <- usefulness[[2]][2] + usefulness[[2]][3] + usefulness[[2]][4]
+    
+    # Usefulness = a weighted average determining the usefulness of this platform
+    score <- (usefulness[[2]][2] * 1 + usefulness[[2]][3] * 0.67 + usefulness[[2]][4] * 0.33 + usefulness[[2]][5] * 0) / popularity
+    
+    names <- c(names, gsub("WorkToolsFrequency", "", platform))
+    popularities <- c(popularities, popularity)
+    scores <- c(scores, score)
+}
+
+scores_df <- data.frame(
+    Popularity = popularities,
+    Usefulness = scores,
+    Name = names
+)
+
+scores_df %>% arrange(desc(Usefulness * Popularity))
+```
+
 ## Majors and likely positions
 
 ```{r echo = FALSE}
@@ -192,6 +227,7 @@ results %>%
     summarize(n = n()) %>%
     mutate(freq = n / sum(n)) %>%
     ggplot() +
-    geom_bar(aes(y = freq, x = Title, fill = Major), stat = "identity") +
+    geom_bar(aes(y = freq, x = Title, fill = Major), stat = "identity", position = position_stack(reverse = TRUE)) +
+    geom_text(aes(y = freq, x = Title, label = ifelse(freq > 0.08, round(freq * 100), "")), position = position_stack(vjust = 0.5)) +
     theme(axis.text.x = element_text(angle = 330, hjust = 0))
 ```
