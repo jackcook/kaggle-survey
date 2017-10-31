@@ -1,3 +1,6 @@
+# Jupyter
+.ipynb_checkpoints
+
 # RStudio
 .Rdata
 .Rhistory
