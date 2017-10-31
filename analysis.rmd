@@ -3,16 +3,40 @@ title: Kaggle Survey Analysis
 output: html_document
 ---
 
-```{r include = FALSE}
+## Introduction
+
+Kaggle recently published the results of their 2017 data science survey. As someone with a budding interest in data science, I figured I'd try to find how the results could be useful to people like me, who are trying to figure out how to get started.
+
+## Installing necessary packages
+
+```{r message = FALSE}
 library(data.table)
 library(dplyr)
 library(ggplot2)
 library(tibble)
+```
 
+## Loading data
+
+I like using tibbles for large data frames, as they make it easier to view in the R interactive prompt.
+
+```{r warning = FALSE}
 results <- as.tibble(fread("./data/multipleChoiceResponses.csv"))
 ```
 
-Kaggle recently published the results of their 2017 data science survey. As someone with a budding interest in data science, I figured I'd try to find how the results could be useful to people like me, who are trying to figure out how to get started. So here we go!
+We can easily see how many people responded to the survey, and how many questions they were asked.
+
+```{r}
+nrow(results)
+```
+
+Each row represents one person who was surveyed, so we can see that 16,716 people filled out the survey.
+
+```{r}
+ncol(results)
+```
+
+Each column represents one question in the survey, which means there were 228(!) questions in total for everyone to answer. Clearly there's lots to analyze, let's get started!
 
 ## Programming language
 
