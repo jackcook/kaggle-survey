@@ -1,10 +1,24 @@
+---
+title: Kaggle Survey Analysis
+output: html_document
+---
+
+```{r include = FALSE}
 library(data.table)
 library(dplyr)
 library(ggplot2)
 library(tibble)
 
 results <- as.tibble(fread("./data/multipleChoiceResponses.csv"))
+```
 
+Kaggle recently published the results of their 2017 data science survey. As someone with a budding interest in data science, I figured I'd try to find how the results could be useful to people like me, who are trying to figure out how to get started. So here we go!
+
+## Resources for learning
+
+One of the first questions in the survey asked participants how useful certain resources are for learning data science skills. For our first graph, we'll plot each resource's usefulness against its popularity. We can see if some resources are overhyped, or if some aren't being used enough. Popularity is determined by how many people answered the question for this resource, and usefulness is computed as a weighted average, with 1 point awarded for each "very useful" answer, half a point for each "somewhat useful" answer, and 0 points for each "not useful" answer.
+
+```{r echo = FALSE}
 # Get all column names that begin with "LearningPlatformUsefulness"
 platforms <- grep("^LearningPlatformUsefulness", names(results), value=T)
 
@@ -51,3 +65,6 @@ ggplot(scores_df, aes(x = Usefulness, y = Popularity)) +
         axis.ticks = element_blank(),
         plot.margin = unit(c(1, 1.25, 1, 1), "cm")
     )
+```
+
+We can see a couple of results that are immediately obvious. Podcasts, newsletters, and conferences all scored the lowest as far as how useful they are for learning, while **Kaggle competitions, Stack Overflow, online courses, and projects scored the highest**. We can also see that while many people love watching YouTube tutorials and reading blogposts, these may not be the most effective ways to learn about data science.
