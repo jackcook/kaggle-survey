@@ -1,6 +1,11 @@
+# RStudio
+.Rhistory
+
 # Project
 conversionRates.csv
 freeformResponses.csv
 multipleChoiceResponses.csv
 RespondentTypeREADME.txt
 schema.csv
+
+analysis.html
