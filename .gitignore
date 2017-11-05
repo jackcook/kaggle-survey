@@ -1,3 +1,6 @@
+# macOS
+.DS_Store
+
 # Jupyter
 .ipynb_checkpoints
 
@@ -11,5 +14,3 @@ freeformResponses.csv
 multipleChoiceResponses.csv
 RespondentTypeREADME.txt
 schema.csv
-
-analysis.html
